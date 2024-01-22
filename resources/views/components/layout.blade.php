@@ -11,8 +11,8 @@
 
 </head>
 
-<body>
-    <div class="text-4xl">this is big text</div>
+<body class="bg-slate-200 text-slate-700 mx-auto my-20 max-w-2xl">
+    {{ $slot }}
 </body>
 
 </html>
