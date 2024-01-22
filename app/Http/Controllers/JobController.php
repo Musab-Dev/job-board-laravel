@@ -25,6 +25,10 @@ class JobController extends Controller
             $q->where('salary', '>=', $min_salary);
         })->when(request('max_salary'), function($q, $max_salary) {
             $q->where('salary', '<=', $max_salary);
+        })->when(request('experience'), function($q, $experience) {
+            $q->where('experience', $experience);
+        })->when(request('category'), function($q, $category) {
+            $q->where('category', $category);
         });
 
         $jobs = $jobs->get();

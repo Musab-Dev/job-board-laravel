@@ -10,8 +10,8 @@
             <p>{{ $job->location }}</p>
         </div>
         <div class="flex items-center space-x-2">
-            <x-tag>{{ $job->experience }}</x-tag>
-            <x-tag>{{ $job->category }}</x-tag>
+            <x-tag>{{ Str::ucfirst($job->experience) }}</x-tag>
+            <x-tag>{{ Str::ucfirst($job->category) }}</x-tag>
         </div>
     </div>
 
