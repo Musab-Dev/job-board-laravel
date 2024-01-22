@@ -1,17 +1,20 @@
 <x-layout>
     <x-breadcrumbs class="mb-4" :links="['Jobs' => '#']" />
     <x-card class="mb-4">
-        <form method="GET" action="{{ route('jobs.index') }}">
+        <form id="jobs-filters" method="GET" action="{{ route('jobs.index') }}">
             <div class="grid grid-cols-2 gap-2 text-sm">
                 <div>
                     <div class="font-semibold mb-1">Search</div>
-                    <x-text-input name="search" value="{{ request('search') }}" placeholder="Search..." />
+                    <x-text-input name="search" value="{{ request('search') }}" placeholder="Search..."
+                        form-id="jobs-filters" />
                 </div>
                 <div>
                     <div class="font-semibold mb-1">Salary</div>
                     <div class="flex space-x-1">
-                        <x-text-input name="min_salary" value="{{ request('min_salary') }}" placeholder="From" />
-                        <x-text-input name="max_salary" value="{{ request('max_salary') }}" placeholder="To" />
+                        <x-text-input name="min_salary" value="{{ request('min_salary') }}" placeholder="From"
+                            form-id="jobs-filters" />
+                        <x-text-input name="max_salary" value="{{ request('max_salary') }}" placeholder="To"
+                            form-id="jobs-filters" />
                     </div>
                 </div>
 
