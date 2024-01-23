@@ -27,7 +27,11 @@ class Job extends Model
             // select * from `jobs` where (`title` like '%search%' or `description` like '%search%') and `salary` >= 'min_salary' and `salary` <= 'max_salary'
             $q->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%' . $search . '%')
-                    ->orWhere('description', 'like', '%' . $search . '%');
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    /* To search in nested relation we use whereHas|orWhereHas */
+                    ->orWhereHas('company', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    });
             });
         })->when($filters['min_salary'] ?? null, function ($q, $min_salary) {
             $q->where('salary', '>=', $min_salary);
