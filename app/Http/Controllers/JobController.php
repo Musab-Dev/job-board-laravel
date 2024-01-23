@@ -12,26 +12,9 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::query();
-
-        $jobs = $jobs->when(request('search'), function ($q, $search) {
-            // to change the operator precedence so that the query will be:
-            // select * from `jobs` where (`title` like '%search%' or `description` like '%search%') and `salary` >= 'min_salary' and `salary` <= 'max_salary'
-            $q->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
-            });
-        })->when(request('min_salary'), function($q, $min_salary) {
-            $q->where('salary', '>=', $min_salary);
-        })->when(request('max_salary'), function($q, $max_salary) {
-            $q->where('salary', '<=', $max_salary);
-        })->when(request('experience'), function($q, $experience) {
-            $q->where('experience', $experience);
-        })->when(request('category'), function($q, $category) {
-            $q->where('category', $category);
-        });
-
-        $jobs = $jobs->get();
+        $filters = request()->only(['search', 'min_salary', 'max_salary', 'experience', 'category']);
+        
+        $jobs = Job::filter($filters)->get();
         return view('jobs.index', compact(['jobs']));
     }
 
