@@ -19,13 +19,17 @@ class DatabaseSeeder extends Seeder
 
         $users = User::all()->shuffle();
 
-        Company::factory(20)->create([
-            'employer_id' => $users->pop()->id
-        ]);
+        for ($i = 1; $i <= 20; $i++) {
+            Company::factory()->create([
+                'employer_id' => $users->pop()->id
+            ]);
+        }
 
-        Job::factory(100)->create([
-            'company_id' => Company::all()->random()->id
-        ]);
+        for ($i = 1; $i <= 100; $i++) {
+            Job::factory()->create([
+                'company_id' => Company::all()->random()->id
+            ]);
+        }
 
     }
 }
