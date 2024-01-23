@@ -40,7 +40,8 @@ class JobController extends Controller
     public function show(Job $job)
     {
         $job = $job->load('company');
-        return view('jobs.show', compact(['job']));
+        $companyOtherJobs = $job->company->jobs()->where('id', '!=', $job->id)->get();
+        return view('jobs.show', compact(['job', 'companyOtherJobs']));
     }
 
     /**
