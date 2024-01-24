@@ -5,16 +5,16 @@
             <div class="grid grid-cols-2 gap-2 text-sm">
                 <div>
                     <div class="font-semibold mb-1">Search</div>
-                    <x-text-input name="search" value="{{ request('search') }}" placeholder="Search..."
+                    <x-text-input type="text" name="search" value="{{ request('search') }}" placeholder="Search..."
                         form-id="jobs-filters" />
                 </div>
                 <div>
                     <div class="font-semibold mb-1">Salary</div>
                     <div class="flex space-x-1">
-                        <x-text-input name="min_salary" value="{{ request('min_salary') }}" placeholder="From"
-                            form-id="jobs-filters" />
-                        <x-text-input name="max_salary" value="{{ request('max_salary') }}" placeholder="To"
-                            form-id="jobs-filters" />
+                        <x-text-input type="number" name="min_salary" value="{{ request('min_salary') }}"
+                            placeholder="From" form-id="jobs-filters" />
+                        <x-text-input type="number" name="max_salary" value="{{ request('max_salary') }}"
+                            placeholder="To" form-id="jobs-filters" />
                     </div>
                 </div>
 
