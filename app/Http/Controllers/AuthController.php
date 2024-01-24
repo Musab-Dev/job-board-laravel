@@ -31,6 +31,19 @@ class AuthController extends Controller
         }
     }
 
+    public function logout()
+    {
+        Auth::logout();
+        // FOR MORE SECURITY:
+        // remove all user-related date from the session
+        request()->session()->invalidate();
+        // regenerate the csrf tokens to prevent preloaded (before logging out)
+        // forms from being sent to the server
+        request()->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
+
     public function register()
     {
         return view('auth.register');
