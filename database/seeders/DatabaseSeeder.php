@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\JobApplicant;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -36,5 +37,15 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        foreach (User::all() as $user) {
+            $jobs = Job::inRandomOrder()->take(random_int(0, 5));
+            foreach ($jobs as $job) {
+                JobApplicant::create([
+                    'job_id' => $job->id,
+                    'applicant_id' => $user->id,
+                    'expected_salary' => random_int(5_000, 170_000),
+                ]);
+            }
+        }
     }
 }
