@@ -53,7 +53,15 @@ class User extends Authenticatable
 
     public function appliedJobs(): HasMany
     {
-        return $this->hasMany(JobApplicant::class);
+        // to escap the defaults, specify the foreign key name as second parameter  
+        return $this->hasMany(JobApplicant::class, 'applicant_id');
+    }
+
+    public function isAppliedToJob(Job|int $job): bool
+    {
+        return $this->where('id', $this->id)
+            ->whereHas('appliedJobs', fn($query) => $query->where('job_id', $job->id ?? $job))
+            ->exists();
     }
 
 }
