@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn() => to_route('jobs.index'));
 
 Route::resource('jobs', JobController::class);
+// Any route defined inside the group function
+// will apply the same middelware
+Route::middleware('auth')->group(function () {
+    Route::resource('jobs.applications', JobApplicationController::class)
+        ->only(['create', 'store', 'destroy'])
+        ->scoped();
+});
 
 /* Auth Routes */
 Route::get('/auth/login', [AuthController::class, 'login'])->name('login');
