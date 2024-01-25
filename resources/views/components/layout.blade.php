@@ -22,7 +22,9 @@
         <ul class="flex space-x-8 items-center">
             @auth
                 <li>
-                    <a href="#">{{ auth()->user()->name }}</a>
+                    <a href="{{ route('my-job-applications.index') }}">
+                        {{ auth()->user()->name ?? 'Anynomus' }}
+                    </a>
                 </li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
