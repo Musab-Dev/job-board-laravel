@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         }
 
         foreach (User::all() as $user) {
-            $jobs = Job::inRandomOrder()->take(random_int(0, 5));
+            $jobs = Job::all()->shuffle()->take(random_int(0, 5));
             foreach ($jobs as $job) {
                 JobApplicant::create([
                     'job_id' => $job->id,
