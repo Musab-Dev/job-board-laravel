@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function company(): HasOne
     {
-        return $this->hasOne(Company::class);
+        return $this->hasOne(Company::class, 'employer_id');
     }
 
     public function appliedJobs(): HasMany
