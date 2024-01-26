@@ -7,11 +7,11 @@
         <form method="POST" action="{{ route('login.post') }}">
             @csrf
             <div class="mb-4 grid grid-cols-1 gap-y-2">
-                <label for="email">Email</label>
+                <x-label for="email" :required="true">Email</x-label>
                 <x-text-input type="email" name="email" id="email" placeholder="someone@example.com" required />
             </div>
             <div class="mb-4 grid grid-cols-1 gap-y-2">
-                <label for="password">Password</label>
+                <x-label for="password" :required="true">Password</x-label>
                 <x-text-input type="password" name="password" id="password" required />
 
                 @if (session('error'))

@@ -16,11 +16,11 @@
             enctype="multipart/form-data">
             @csrf
             <div class="flex flex-col gap-y-2 mb-5">
-                <label for="expected_salary">Upload Your CV</label>
+                <x-label for="expected_salary" :required="true">Upload Your CV</x-label>
                 <x-text-input type="file" name="cv" />
             </div>
             <div class="flex flex-col gap-y-2 mb-5">
-                <label for="expected_salary">Expected Salary</label>
+                <x-label for="expected_salary" :required="true">Expected Salary</x-label>
                 <x-text-input type="number" name="expected_salary" />
             </div>
 
