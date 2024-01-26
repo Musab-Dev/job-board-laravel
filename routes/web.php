@@ -24,7 +24,7 @@ Route::resource('jobs', JobController::class);
 // will apply the same middelware
 Route::middleware('auth')->group(function () {
     Route::resource('jobs.applications', JobApplicationController::class)
-        ->only(['create', 'store', 'destroy'])
+        ->only(['create', 'store'])
         ->scoped();
 
     Route::resource('my-job-applications', MyJobApplicationController::class)

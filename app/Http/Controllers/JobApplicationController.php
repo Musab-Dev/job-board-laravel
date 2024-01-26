@@ -22,23 +22,23 @@ class JobApplicationController extends Controller
      */
     public function store(Job $job, Request $request)
     {
-        $request->validate(['expected_salary' => 'required|integer|min:1|max:1000000']);
+        $data = $request->validate([
+            'expected_salary' => 'required|integer|min:1|max:1000000',
+            'cv' => 'required|file|mimes:pdf|max:2048'
+        ]);
+
+        $file = $request->file('cv');
+        $path = $file->store('cvs', 'cv_private_disk');
 
         $job->applicants()->create([
             'job_id' => $job->id,
             'applicant_id' => auth()->user()->id,
             'expected_salary' => $request->expected_salary,
+            'cv_path' => $path,
         ]);
 
         return redirect()->route('jobs.show', compact(['job']))
             ->with('success', 'your application submitted successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

@@ -12,8 +12,13 @@
             <h4 class="text-lg font-medium">Job Application Form</h4>
         </div>
 
-        <form method="post" action="{{ route('jobs.applications.store', ['job' => $job]) }}">
+        <form method="post" action="{{ route('jobs.applications.store', ['job' => $job]) }}"
+            enctype="multipart/form-data">
             @csrf
+            <div class="flex flex-col gap-y-2 mb-5">
+                <label for="expected_salary">Upload Your CV</label>
+                <x-text-input type="file" name="cv" />
+            </div>
             <div class="flex flex-col gap-y-2 mb-5">
                 <label for="expected_salary">Expected Salary</label>
                 <x-text-input type="number" name="expected_salary" />
