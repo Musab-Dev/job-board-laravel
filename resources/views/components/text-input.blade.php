@@ -35,9 +35,7 @@
                     'border-slate-200' => !$errors->has($name),
                     'border-red-500' => $errors->has($name),
                     'pr-8' => $formId || $errors->has($name),
-                ])>
-                {{ old($name, $value) }}
-            </textarea>
+                ])>{{ old($name, $value) }}</textarea>
         @endif
 
     </div>

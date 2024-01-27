@@ -2,37 +2,48 @@
     <x-breadcrumbs class="mb-4" :links="['My Jobs' => '#']" />
     @forelse ($jobs as $job)
         <x-job-card :$job>
-            <div class="flex justify-between items-end">
-                <div class="flex flex-col space-y-3 text-sm text-slate-500">
-                    <div>
-                        <span class="font-medium">
-                            You posted this job {{ $job->created_at->diffForHumans() }}
-                        </span>
+            <div class="text-sm text-slate-500 text-justify mb-4">
+                {!! nl2br(e($job->description)) !!}
+            </div>
+            <div>You posted this job {{ $job->created_at->diffForHumans() }}</div>
+            <div class="mt-4">
+                <h6 class="font-semibold mb-2">Applicants</h6>
+
+                @forelse ($job->applicants as $application)
+                    <div class="p-3 rounded-md bg-slate-100 mb-3">
+                        <div class="flex justify-between items-center">
+                            <div class="space-y-0">
+                                <div class="font-medium">{{ $application->applicant->name }}</div>
+                                <div class="text-sm text-slate-500">
+                                    Applied {{ $application->created_at->diffForHumans() }}
+                                </div>
+                                <div class="text-sm font-medium text-purple-600 hover:underline">
+                                    Download Applicant CV
+                                </div>
+                            </div>
+                            <div class="border border-dashed border-slate-300 rounded-md p-2">
+                                ${{ number_format($application->expected_salary) }}
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <span class="font-medium">
-                            there are {{ $job->applicants->count() }}
-                            {{ Str::plural('applicant', $job->applicants->count()) }}
-                            for this job
-                        </span>
+                @empty
+                    <div class="border border-slate-300 border-dashed rounded-md">
+                        <div class="text-center text-indigo-400 p-4">No Applicants Yet!</div>
                     </div>
-                    {{-- <div>
-                        <span class="font-medium">Average Asking Salary: </span>
-                        ${{ number_format($application->job->applicants_avg_expected_salary) }}
-                    </div> --}}
-                </div>
-                <div>
-                    <form method="post" action="{{ route('my-jobs.destroy', ['my_job' => $job]) }}">
+                @endforelse
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <a class="w-full mt-4 bg-slate-700 p-2 text-white text-center rounded-md"
+                        href="{{ route('my-jobs.edit', $job) }}">
+                        Edit Job
+                    </a>
+
+                    <form action="{{ route('my-jobs.destroy', $job) }}" method="post">
                         @csrf
                         @method('delete')
-                        <button type="submit" class="mt-6 rounded-md bg-slate-700 text-white px-2 py-1">
-                            Delete Job
-                        </button>
+                        <button class="w-full mt-4 bg-red-600 p-2 text-white text-center rounded-md">Delete Job</button>
                     </form>
                 </div>
             </div>
-
-
         </x-job-card>
     @empty
         <x-card class="py-10 mt-10">

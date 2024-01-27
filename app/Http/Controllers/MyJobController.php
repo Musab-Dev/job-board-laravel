@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\JobRequest;
 use App\Models\Job;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class MyJobController extends Controller
      */
     public function index()
     {
-        $jobs = auth()->user()->company->jobs;
+        $jobs = auth()->user()->company->jobs()->with(['company', 'applicants', 'applicants.applicant'])->latest()->get();
         return view('my-jobs.index', compact('jobs'));
     }
 
@@ -27,18 +28,9 @@ class MyJobController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(JobRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|min:5|max:255',
-            'location' => 'required|string|min:2|max:255',
-            'salary' => 'required|integer|numeric|min:1|max:1000000',
-            'description' => 'nullable|string|min:100',
-            'experience' => 'required|in:' . implode(',', Job::$experiences),
-            'category' => 'required|in:' . implode(',', Job::$categories),
-        ]);
-
-        auth()->user()->company->jobs()->create($data);
+        auth()->user()->company->jobs()->create($request->validated());
 
         return redirect()->route('my-jobs.index')->with('success', 'job posted successfully');
     }
@@ -54,24 +46,31 @@ class MyJobController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Job $myJob)
     {
-        //
+        return view('my-jobs.edit', ['job' => $myJob]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(JobRequest $request, Job $myJob)
     {
-        //
+        $myJob->update($request->validated());
+
+        return redirect()->route('my-jobs.index')->with('success', 'Job post updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Job $myJob)
     {
-        //
+        if ($myJob->applicants->count() > 0) {
+            return redirect()->route('my-jobs.index')->with('error', 'You can not delete this job offer; since there are applicants to this job.');
+        }
+
+        $myJob->delete();
+        return redirect()->route('my-jobs.index')->with('success', 'Job post deleted successfully');
     }
 }
