@@ -26,6 +26,13 @@
                         {{ auth()->user()->name ?? 'Anynomus' }}
                     </a>
                 </li>
+                @if (auth()->user()->company != null)
+                    <li>
+                        <a href="{{ route('my-jobs.index') }}">
+                            My Jobs
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

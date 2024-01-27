@@ -5,6 +5,7 @@ use App\Http\Controllers\BeEmployerController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\MyJobApplicationController;
+use App\Http\Controllers\MyJobController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('employer', BeEmployerController::class)
         ->only(['create', 'store']);
+
+    Route::middleware('isEmployer')->resource('my-jobs', MyJobController::class);
 });
 
 /* Auth Routes */
