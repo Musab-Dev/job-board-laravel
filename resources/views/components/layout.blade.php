@@ -21,15 +21,22 @@
 
         <ul class="flex space-x-8 items-center">
             @auth
-                <li>
-                    <a href="{{ route('my-job-applications.index') }}">
-                        {{ auth()->user()->name ?? 'Anynomus' }}
-                    </a>
-                </li>
+
                 @if (auth()->user()->company != null)
                     <li>
                         <a href="{{ route('my-jobs.index') }}">
                             My Jobs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('my-jobs.create') }}">
+                            Post New Job
+                        </a>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ route('my-job-applications.index') }}">
+                            {{ auth()->user()->name ?? 'Anynomus' }}
                         </a>
                     </li>
                 @endif

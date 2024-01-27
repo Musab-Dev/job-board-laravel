@@ -1,4 +1,5 @@
 <x-layout>
+    <x-breadcrumbs class="mb-4" :links="['My Jobs' => '#']" />
     @forelse ($jobs as $job)
         <x-job-card :$job>
             <div class="flex justify-between items-end">
@@ -37,7 +38,7 @@
         <x-card class="py-10 mt-10">
             <h5 class="text-center">
                 you did not post any jobs yet.
-                <a href="{{ route('jobs.index') }}" class="font-medium text-indigo-500 hover:underline">
+                <a href="{{ route('my-jobs.create') }}" class="font-medium text-indigo-500 hover:underline">
                     add job oppertunity
                 </a>
             </h5>
