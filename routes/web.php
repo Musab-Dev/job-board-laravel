@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => to_route('jobs.index'));
 
-Route::resource('jobs', JobController::class);
+Route::resource('jobs', JobController::class)
+    ->only(['index', 'show']);
 // Any route defined inside the group function
 // will apply the same middelware
 Route::middleware('auth')->group(function () {

@@ -13,6 +13,8 @@ class MyJobController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAnyForEmployer', Job::class);
+
         $jobs = auth()->user()->company->jobs()->with(['company', 'applicants', 'applicants.applicant'])->latest()->get();
         return view('my-jobs.index', compact('jobs'));
     }
@@ -22,6 +24,8 @@ class MyJobController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Job::class);
+
         return view('my-jobs.create');
     }
 
@@ -30,17 +34,11 @@ class MyJobController extends Controller
      */
     public function store(JobRequest $request)
     {
+        $this->authorize('create', Job::class);
+
         auth()->user()->company->jobs()->create($request->validated());
 
         return redirect()->route('my-jobs.index')->with('success', 'job posted successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -48,6 +46,8 @@ class MyJobController extends Controller
      */
     public function edit(Job $myJob)
     {
+        $this->authorize('update', $myJob);
+
         return view('my-jobs.edit', ['job' => $myJob]);
     }
 
@@ -56,6 +56,8 @@ class MyJobController extends Controller
      */
     public function update(JobRequest $request, Job $myJob)
     {
+        $this->authorize('update', $myJob);
+
         $myJob->update($request->validated());
 
         return redirect()->route('my-jobs.index')->with('success', 'Job post updated successfully!');
@@ -66,9 +68,7 @@ class MyJobController extends Controller
      */
     public function destroy(Job $myJob)
     {
-        if ($myJob->applicants->count() > 0) {
-            return redirect()->route('my-jobs.index')->with('error', 'You can not delete this job offer; since there are applicants to this job.');
-        }
+        $this->authorize('delete', $myJob);
 
         $myJob->delete();
         return redirect()->route('my-jobs.index')->with('success', 'Job post deleted successfully');

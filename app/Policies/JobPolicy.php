@@ -9,60 +9,90 @@ use Illuminate\Auth\Access\Response;
 
 class JobPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
+    // NOTE:
+    // when there are multiple controllers are using
+    // the same resource (eg. job) then we use the 
+    // resource policy for both of them adding custom
+    // methods (abilities) and we call them explicitly
+    // inside the corresponding controller
+
+    // this ability to be used in (JobController/index)
     public function viewAny(?User $user): bool
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
+    // this ability to be used in (MyJobController/index)
+    public function viewAnyForEmployer(User $user): bool
+    {
+        // since there is a middleware to ensure that the user is 
+        // employer we can return true directly, no need to check
+        // for that again.
+        return true;
+    }
+
+    // this ability to be used in (JobController/show)
     public function view(?User $user, Job $job): bool
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
+    // this ability to be used in (MyJobController/create)
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Job $job): bool
+    // this ability to be used in (MyJobController/update)
+    public function update(User $user, Job $job): bool|Response
     {
-        return false;
+        if ($job->company->employer_id != $user->id) {
+            return response::deny('لا يمكنك تعديل وظيفة لا تملكها');
+        }
+        if ($job->applicants()->count() > 0) {
+            return response::deny('لا يمكن تعديل الوظيفة؛ لوجود متقدمين');
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Job $job): bool
+    // this ability to be used in (MyJobController/delete)
+    public function delete(User $user, Job $job): bool|Response
     {
-        return false;
+        if ($job->company->employer_id != $user->id) {
+            return response::deny('لا يمكنك حذف وظيفة لا تملكها');
+        }
+        if ($job->applicants()->count() > 0) {
+            return response::deny('لا يمكن حذف الوظيفة؛ لوجود متقدمين');
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Job $job): bool
+    // this ability to be used in (MyJobController/delete)
+    public function restore(User $user, Job $job): bool|Response
     {
-        return false;
+        if ($job->company->employer_id != $user->id) {
+            return response::deny('لا يمكنك حذف وظيفة لا تملكها');
+        }
+        if ($job->applicants()->count() > 0) {
+            return response::deny('لا يمكن حذف الوظيفة؛ لوجود متقدمين');
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Job $job): bool
+    // this ability to be used in (MyJobController/delete)
+    public function forceDelete(User $user, Job $job): bool|Response
     {
-        return false;
+        if ($job->company->employer_id != $user->id) {
+            return response::deny('لا يمكنك حذف وظيفة لا تملكها');
+        }
+        if ($job->applicants()->count() > 0) {
+            return response::deny('لا يمكن حذف الوظيفة؛ لوجود متقدمين');
+        }
+
+        return true;
     }
 
     public function apply(User $user, Job $job): bool
